@@ -39,7 +39,7 @@ function CardList() {
     setList(DEFAULT_LIST_PLACEHOLDER);
   }, [status, response]);
 
-  return <CardListPresenter cards={list} loaded={isLoaded} />;
+  return <CardListPresenter cards={list} loaded={isLoaded} location={appLocation} />;
 }
 
 export default CardList;
