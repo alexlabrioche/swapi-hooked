@@ -6,7 +6,7 @@ function Grid({ children }) {
     <Box
       sx={{
         display: 'grid',
-        gridGap: [3, 4, 5],
+        gridGap: [3, 4],
         gridTemplateColumns: ['repeat(1, 1fr)', 'repeat(2, 1fr)'],
       }}
     >

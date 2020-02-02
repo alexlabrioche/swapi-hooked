@@ -1,13 +1,13 @@
 import React from 'react';
 import { Button, Text } from 'rebass';
-import Link from './core/Link';
 
-function AppButton({ children, to = '/', big = false, ...props }) {
+function AppButton({ children, big = false, disabled, ...props }) {
   return (
-    <Button {...props}>
-      <Link to={to}>
-        <Text fontSize={!big ? [1, 2] : [3, 4]}>{children}</Text>
-      </Link>
+    <Button
+      {...props}
+      style={{ cursor: disabled ? '' : 'pointer', visibility: disabled ? 'hidden' : 'visible' }}
+    >
+      <Text fontSize={!big ? [1, 2] : [3, 4]}>{children}</Text>
     </Button>
   );
 }

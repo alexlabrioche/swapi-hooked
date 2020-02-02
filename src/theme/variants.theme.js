@@ -24,8 +24,12 @@ export default {
   card: {
     backgroundColor: 'shade',
     borderRadius: '10px',
-    p: [10, 20],
-    boxShadow: '0 4px 8px rgba(0, 0, 0, .125)',
+    p: ['5px', 10],
+    boxShadow: '0 4px 4px rgba(0, 0, 0, .25)',
     cursor: 'pointer',
+    transition: 'all 150ms ease',
+    '&:hover': {
+      boxShadow: '8px 8px 12px rgba(0, 0, 0, .25)',
+    },
   },
 };

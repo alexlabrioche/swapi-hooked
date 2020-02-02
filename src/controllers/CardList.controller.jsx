@@ -1,45 +1,68 @@
-import React from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 
 import { addMoreInfos } from '../utils/addMoreInfos';
 import useApiRequest from '../hooks/useApi';
-import { getApiEndpoint } from '../router/Router';
+import useUrl from '../hooks/useUrl';
 
-import CardListPresenter from '../pages/CardList';
+import CardListPresenter from '../pages/List';
 
 const SWAPI_ROOT_URL = 'https://swapi.co/api';
-
-const DEFAULT_LIST_PLACEHOLDER = Array.from(Array(10), (_, i) => i + 1);
+const DEFAULT_LIST = Array.from(Array(10), (_, i) => i + 1);
 
 function CardList() {
-  const { pathname } = useLocation();
-  const [appLocation, setAppLocation] = React.useState(null);
+  const [appLocation, setAppLocation] = useState(null);
   const [{ status, response }, makeRequest] = useApiRequest();
-  const [list, setList] = React.useState(DEFAULT_LIST_PLACEHOLDER);
-  const [isLoaded, setIsLoaded] = React.useState(false);
-
-  console.info('useApi', { status, response });
-  React.useEffect(() => {
-    // console.info('UE handlePageChange');
-    if (appLocation !== pathname) {
-      setList(DEFAULT_LIST_PLACEHOLDER);
-      setAppLocation(pathname);
-      makeRequest(SWAPI_ROOT_URL + getApiEndpoint(pathname));
+  const [location, params] = useUrl('page');
+  const [list, setList] = useState(DEFAULT_LIST);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [nextPage, setNextPage] = useState(null);
+  const [previousPage, setPreviousPage] = useState(null);
+  function handlePagination(destination) {
+    switch (destination) {
+      case 'NEXT':
+        makeRequest(nextPage);
+        break;
+      case 'PREV':
+        makeRequest(previousPage);
+        break;
+      default:
+        break;
     }
-  }, [appLocation, pathname]);
+  }
 
-  React.useEffect(() => {
+  useEffect(() => {
+    // console.info('UE handlePageChange');
+    if (appLocation !== location) {
+      setList(DEFAULT_LIST);
+      setAppLocation(location);
+      makeRequest(`${SWAPI_ROOT_URL}/${location}/?page=${params.page}`);
+    }
+  }, [appLocation, location, makeRequest, params]);
+
+  useEffect(() => {
     if (status === 'SUCCESS') {
+      const { results, next, previous } = response.data;
       setIsLoaded(true);
-      const { results } = response.data;
-      setList(addMoreInfos(results, pathname));
+      setNextPage(next);
+      setPreviousPage(previous);
+      setList(addMoreInfos(results, location));
       return;
     }
     setIsLoaded(false);
-    setList(DEFAULT_LIST_PLACEHOLDER);
-  }, [status, response]);
+    setList(DEFAULT_LIST);
+  }, [status, response, location]);
 
-  return <CardListPresenter cards={list} loaded={isLoaded} location={appLocation} />;
+  return (
+    <CardListPresenter
+      cards={list}
+      loaded={isLoaded}
+      location={appLocation}
+      handlePagination={handlePagination}
+      isNext={nextPage ? true : false}
+      isPrev={previousPage ? true : false}
+      pageNumber={Number(params.page)}
+    />
+  );
 }
 
 export default CardList;

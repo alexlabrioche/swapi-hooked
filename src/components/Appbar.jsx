@@ -6,7 +6,7 @@ import BulbIcon from './BulbIcon';
 
 function Appbar() {
   return (
-    <Flex px={2} alignItems={'center'} flexDirection={['column', 'column', 'row']}>
+    <Flex px={2} py={[2, 3]} alignItems={'center'} flexDirection={['column', 'column', 'row']}>
       <Text p={2} fontSize={[3, 4]} fontWeight="bold">
         <Link variant="invert-nav" to="/">
           Swapizz
@@ -16,7 +16,7 @@ function Appbar() {
       {dataSource.map(({ LOCATION, NAME }) => {
         if (LOCATION === '/') return null;
         return (
-          <Link variant="nav" to={LOCATION}>
+          <Link variant="nav" to={`/${LOCATION}/1`}>
             {NAME}
           </Link>
         );

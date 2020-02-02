@@ -7,7 +7,7 @@ function BulbIcon() {
   const { isDark, toggleTheme } = useContext(ThemeCtx);
   return (
     <Text style={{ cursor: 'pointer' }} onClick={toggleTheme} color="baseFont" fontSize={[2, 3]}>
-      {isDark ? <AiOutlineBulb /> : <AiTwotoneBulb />}
+      {isDark ? <AiTwotoneBulb /> : <AiOutlineBulb />}
     </Text>
   );
 }

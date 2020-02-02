@@ -9,7 +9,7 @@ function PageLayout({ children }) {
         backgroundColor: 'background',
         color: 'baseFont',
         width: '100vw',
-        height: '100vh',
+        minHeight: '100vh',
       }}
     >
       <Appbar />
